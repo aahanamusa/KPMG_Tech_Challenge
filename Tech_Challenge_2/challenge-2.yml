@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Gather instance metadata
+      command: "curl -s  http://169.254.169.254/latest/dynamic/instance-identity/document"
+      register: command_output
+    - local_action: copy content={{ command_output.stdout_lines|to_json(indent=4, sort_keys=True)}} dest=/root/file1.json      
